@@ -1,13 +1,12 @@
 import {
-  PokemonType,
-  PokemonFetchResult,
-  PokemonTypeResult,
+  PokemonAPIFetchResult,
+  PokemonAPIItem,
+  PokemonDetailedFetchResult,
   PokemonTypeFetchResult,
-  PokemonDetailedResult,
-  PokemonDetailed,
-} from "./pokemon.types";
+} from "./pokemon.dto";
+import { PokemonDetailed, PokemonType } from "./pokemon.types";
 
-function parsePokemonResult(result: PokemonTypeResult) {
+function parsePokemonResult(result: PokemonAPIItem) {
   const urlSections = result.url.split("/");
   return {
     name: result.name,
@@ -17,7 +16,7 @@ function parsePokemonResult(result: PokemonTypeResult) {
 }
 
 function parsePokemonDetailedResult(
-  result: PokemonDetailedResult
+  result: PokemonDetailedFetchResult
 ): PokemonDetailed {
   return {
     ...result,
@@ -34,7 +33,7 @@ export async function fetchPokemonTypes(): Promise<PokemonType[]> {
     throw new Error("Failed to fetch data");
   }
 
-  const jsonRes: PokemonFetchResult = await res.json();
+  const jsonRes: PokemonAPIFetchResult = await res.json();
 
   return jsonRes.results.map((type) => parsePokemonResult(type));
 }
@@ -48,7 +47,7 @@ export async function fetchPokemons(): Promise<PokemonType[]> {
     throw new Error("Failed to fetch data");
   }
 
-  const jsonRes: PokemonFetchResult = await res.json();
+  const jsonRes: PokemonAPIFetchResult = await res.json();
 
   return jsonRes.results.map((pokemon) => parsePokemonResult(pokemon));
 }
@@ -60,7 +59,7 @@ export async function fetchPokemon(id: string): Promise<PokemonDetailed> {
     throw new Error("Failed to fetch data");
   }
 
-  const jsonRes: PokemonDetailedResult = await res.json();
+  const jsonRes: PokemonDetailedFetchResult = await res.json();
 
   return parsePokemonDetailedResult(jsonRes);
 }

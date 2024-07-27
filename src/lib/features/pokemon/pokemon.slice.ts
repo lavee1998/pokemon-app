@@ -1,5 +1,4 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { PokemonDetailed, PokemonType } from "./pokemon.types";
 import { createAppSlice } from "@/lib/createAppSlice";
 import {
   fetchPokemon,
@@ -7,6 +6,8 @@ import {
   fetchPokemonsByType,
   fetchPokemonTypes,
 } from "./pokemon.request";
+import { PokemonAPIItem } from "./pokemon.dto";
+import { PokemonDetailed, PokemonType } from "./pokemon.types";
 
 export interface PokemonState {
   types: PokemonType[];
