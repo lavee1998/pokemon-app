@@ -6,7 +6,9 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { StoreProvider } from "./StoreProvider";
-import { Container } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
+import Navbar from "./components/Navbar";
+import { theme } from "./theme";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,11 +24,14 @@ export default function RootLayout({
 }>) {
   return (
     <StoreProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <Container>{children}</Container>
-        </body>
-      </html>
+      <ThemeProvider theme={theme}>
+        <html lang="en">
+          <body className={inter.className}>
+            <Navbar />
+            <Box sx={{ mt: "110px" }}>{children}</Box>
+          </body>
+        </html>
+      </ThemeProvider>
     </StoreProvider>
   );
 }

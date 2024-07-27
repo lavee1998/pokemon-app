@@ -7,9 +7,9 @@ import CatchedPokemonCheckbox from "./components/CaughtPokemonCheckbox";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main>
       <Grid container>
-        <Grid xs={6} item>
+        <Grid xs={12} sm={6} item p={2}>
           <Box mb={3}>
             <PokemonTypeTextField />
           </Box>
@@ -20,7 +20,7 @@ export default function Home() {
             <CatchedPokemonCheckbox />
           </Box>
         </Grid>
-        <Grid xs={6} item>
+        <Grid xs={12} sm={6} item>
           <PokemonList />
         </Grid>
       </Grid>

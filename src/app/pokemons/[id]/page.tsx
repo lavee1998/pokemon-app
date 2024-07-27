@@ -32,10 +32,22 @@ export default function DetailsView() {
   };
 
   const getIsAlreadyCatchedPokemon = (id: string) => {
-    return caughtPokemonIds.find((pokemonId) => pokemonId == id);
+    return !!caughtPokemonIds.find((pokemonId) => pokemonId == id);
   };
 
   if (!pokemon) return null; //TODO
+
+  const attributes = [
+    { name: "Name", value: pokemon?.name, postfix: "" },
+    { name: "Weight", value: pokemon?.weight, postfix: "kg" },
+    { name: "Height", value: pokemon?.height, postfix: "m" },
+    { name: "Abilities", values: pokemon?.abilities, postfix: "" },
+    {
+      name: "Status",
+      postfix: "",
+      value: getIsAlreadyCatchedPokemon(pokemon.id) ? "Catched" : "",
+    },
+  ];
 
   return (
     <Box width={"100%"}>
@@ -45,61 +57,63 @@ export default function DetailsView() {
           Back to search
         </Box>
       </ButtonBase>
-      <Grid container>
-        <Grid item xs={6}>
+      <Grid container sx={{ alignItems: "center" }}>
+        <Grid item xs={12} sm={6} p={2}>
           <NextImage
-            width={400} //TODO
+            width={400}
             height={300}
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+              border:
+                "3px solid " +
+                (getIsAlreadyCatchedPokemon(pokemon.id)
+                  ? theme.palette.secondary.main
+                  : theme.palette.primary.main),
+            }}
             alt={pokemon?.name + "-profile-image"}
             src={pokemon?.imageUrl || ""}
           />
         </Grid>
-        <Grid item xs={6}>
-          <Grid container>
-            <Grid container p={2} bgcolor={theme.palette.primary.main}>
-              <Grid item xs={6}>
-                Name
+        <Grid item sm={6} xs={12}>
+          {attributes.map((attribute, i) => {
+            return (
+              <Grid
+                container
+                p={2}
+                key={i}
+                bgcolor={
+                  i % 2 == 0
+                    ? theme.palette.primary.light
+                    : theme.palette.secondary.light
+                }
+              >
+                <Grid item xs={6}>
+                  {attribute.name}
+                </Grid>
+                <Grid item xs={6}>
+                  {attribute.value
+                    ? attribute.value + attribute.postfix
+                    : attribute?.values?.map(
+                        (ability, i) =>
+                          !ability.is_hidden && (
+                            <Box key={i}>{ability.ability.name}</Box>
+                          )
+                      )}
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                {pokemon?.name}
-              </Grid>
-            </Grid>
-            <Grid container p={2} bgcolor={theme.palette.secondary.main}>
-              <Grid item xs={6}>
-                Weight
-              </Grid>
-              <Grid item xs={6}>
-                {pokemon?.weight}kg
-              </Grid>
-            </Grid>
-            <Grid container p={2} bgcolor={theme.palette.secondary.main}>
-              <Grid item xs={6}>
-                Height
-              </Grid>
-              <Grid item xs={6}>
-                {pokemon?.height}m
-              </Grid>
-            </Grid>
-            <Grid container p={2} bgcolor={theme.palette.primary.main}>
-              <Grid item xs={6}>
-                Abilities
-              </Grid>
-              <Grid item xs={6}>
-                {pokemon?.abilities.map(
-                  (ability, i) =>
-                    !!ability.is_hidden && (
-                      <Box key={i}>{ability.ability.name}</Box>
-                    )
-                )}
-              </Grid>
-            </Grid>
-          </Grid>
+            );
+          })}
+
           <Button
             sx={{
               mt: theme.spacing(3),
             }}
             onClick={() => handleClickCatchReleaseButton(pokemon.id)}
             fullWidth
+            color={
+              getIsAlreadyCatchedPokemon(pokemon.id) ? "secondary" : "primary"
+            }
             variant="contained"
           >
             {getIsAlreadyCatchedPokemon(pokemon.id) ? "Release" : "Catch"}
