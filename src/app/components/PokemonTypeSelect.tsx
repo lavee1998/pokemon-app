@@ -1,12 +1,13 @@
 "use client";
 import {
   fetchPokemonsBySelectedTypeAsync,
-  selectStatus,
   selectType,
   selectTypes,
   setSelectedPokemonType,
 } from "@/lib/features/pokemon/pokemon.slice";
-import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import { useTheme } from "@mui/material";
 import FormControl from "@mui/material/FormControl/FormControl";
 import InputLabel from "@mui/material/InputLabel/InputLabel";
 import MenuItem from "@mui/material/MenuItem/MenuItem";
@@ -15,9 +16,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select/Select";
 export default function PokemonTypeSelect() {
   const dispatch = useAppDispatch();
   const pokemonTypes = useAppSelector(selectTypes);
-  // const status = useAppSelector(selectStatus); TODO
   const selectedType = useAppSelector(selectType);
-
+  const theme = useTheme();
   const selectAllId = "select-all-id"; //TODO
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -39,13 +39,23 @@ export default function PokemonTypeSelect() {
         id="pokemon-type-select"
         value={selectedType?.id || selectAllId} //TODO
         label="Pokemon types"
+        IconComponent={(props) => (
+          <KeyboardArrowDown {...props} sx={{ mr: 3 }} />
+        )}
         onChange={handleChange}
       >
         <MenuItem key={selectAllId} value={selectAllId}>
           Select all
         </MenuItem>
         {pokemonTypes?.map((type, i) => (
-          <MenuItem key={i} value={type.id}>
+          <MenuItem
+            sx={{
+              color: i % 2 == 0 ? theme.palette.primary.main : "black",
+              background: i % 2 != 0 ? "white" : theme.palette.grey[100],
+            }}
+            key={i}
+            value={type.id}
+          >
             {type.name}
           </MenuItem>
         ))}

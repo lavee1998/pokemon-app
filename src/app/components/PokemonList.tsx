@@ -19,7 +19,6 @@ export default function PokemonList() {
   const showOnlyCaughtPokemons = useAppSelector(selectShowOnlyCaughtPokemons);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
-
   const caughtPokemonIds = useAppSelector(selectCaughtPokemonIds);
   const updateCaughtPokemonIds = useUpdateCaughtPokemonIds();
 
@@ -44,11 +43,10 @@ export default function PokemonList() {
       overflow={"auto"}
       p={2}
     >
-      <Grid container p={1} my={1} mx={2}>
+      <Grid container p={1} my={1}>
         <Grid item xs={3}>
           Name
         </Grid>
-
         <Grid item xs={3}>
           Type
         </Grid>

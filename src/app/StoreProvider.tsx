@@ -23,19 +23,19 @@ export const StoreProvider = ({ children }: Props) => {
     storeRef.current = makeStore();
     storeRef.current.dispatch(initializePokemonTypesAsync());
     storeRef.current.dispatch(fetchPokemonsBySelectedTypeAsync());
-
-    //Load caught pokemon ids from local storage
-    const caughtPokemonIds = localStorage.getItem("caughtPokemonIds");
-
-    if (caughtPokemonIds && typeof caughtPokemonIds == "string")
-      //Set loaded pokemon ids to store
-      storeRef.current.dispatch(
-        setCaughtPokemonIds(JSON.parse(caughtPokemonIds))
-      );
   }
 
   useEffect(() => {
     if (storeRef.current != null) {
+      //Load caught pokemon ids from local storage
+      const caughtPokemonIds = localStorage.getItem("caughtPokemonIds");
+
+      if (caughtPokemonIds && typeof caughtPokemonIds == "string")
+        //Set loaded pokemon ids to store
+        storeRef.current.dispatch(
+          setCaughtPokemonIds(JSON.parse(caughtPokemonIds))
+        );
+
       const unsubscribe = setupListeners(storeRef.current.dispatch);
       return unsubscribe;
     }

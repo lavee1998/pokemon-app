@@ -2,7 +2,7 @@
 
 import { selectStatus } from "@/lib/features/pokemon/pokemon.slice";
 import { useAppSelector } from "@/lib/hooks";
-import { Backdrop, CircularProgress, LinearProgress } from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 export default function Loader() {
   const status = useAppSelector(selectStatus);
