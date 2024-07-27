@@ -17,6 +17,7 @@ export type PokemonFetchResult = {
 };
 
 export type PokemonDetailed = {
+  id: string;
   height: number;
   name: string;
   weight: number;
@@ -25,7 +26,6 @@ export type PokemonDetailed = {
     is_hidden: false;
   }[];
   imageUrl: string;
-
   types: {
     types: PokemonTypeResult;
   };
@@ -33,6 +33,7 @@ export type PokemonDetailed = {
 
 export type PokemonDetailedResult = {
   height: number;
+  id: string;
   name: string;
   weight: number;
   abilities: {

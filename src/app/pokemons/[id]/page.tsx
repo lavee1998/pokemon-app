@@ -1,6 +1,11 @@
 "use client";
 
-import { selectPokemon, setPokemon } from "@/lib/features/pokemon/pokemon.slice";
+import { useUpdateCaughtPokemonIds } from "@/lib/features/pokemon/pokemon.hooks";
+import {
+  selectCaughtPokemonIds,
+  selectPokemon,
+  setPokemon,
+} from "@/lib/features/pokemon/pokemon.slice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Button, ButtonBase, Grid, useTheme } from "@mui/material";
@@ -10,15 +15,27 @@ import { useRouter } from "next/navigation";
 
 export default function DetailsView() {
   const pokemon = useAppSelector(selectPokemon);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const caughtPokemonIds = useAppSelector(selectCaughtPokemonIds);
+  const updateCaughtPokemonIds = useUpdateCaughtPokemonIds();
+
+  const handleClickCatchReleaseButton = (id: string) => {
+    updateCaughtPokemonIds(id);
+  };
 
   const router = useRouter();
   const theme = useTheme();
 
   const handleClickBackToSearch = () => {
-    dispatch(setPokemon(null))
+    dispatch(setPokemon(null));
     router.push("/");
   };
+
+  const getIsAlreadyCatchedPokemon = (id: string) => {
+    return caughtPokemonIds.find((pokemonId) => pokemonId == id);
+  };
+
+  if (!pokemon) return null; //TODO
 
   return (
     <Box width={"100%"}>
@@ -81,12 +98,12 @@ export default function DetailsView() {
             sx={{
               mt: theme.spacing(3),
             }}
+            onClick={() => handleClickCatchReleaseButton(pokemon.id)}
             fullWidth
             variant="contained"
           >
-            Release
+            {getIsAlreadyCatchedPokemon(pokemon.id) ? "Release" : "Catch"}
           </Button>
-          {/* TODO */}
         </Grid>
       </Grid>
     </Box>

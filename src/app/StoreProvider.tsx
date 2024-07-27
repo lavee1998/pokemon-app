@@ -3,6 +3,7 @@
 import {
   fetchPokemonsBySelectedTypeAsync,
   initializePokemonTypesAsync,
+  setCaughtPokemonIds,
 } from "@/lib/features/pokemon/pokemon.slice";
 import type { AppStore } from "@/lib/store";
 import { makeStore } from "@/lib/store";
@@ -22,6 +23,15 @@ export const StoreProvider = ({ children }: Props) => {
     storeRef.current = makeStore();
     storeRef.current.dispatch(initializePokemonTypesAsync());
     storeRef.current.dispatch(fetchPokemonsBySelectedTypeAsync());
+
+    //Load caught pokemon ids from local storage
+    const caughtPokemonIds = localStorage.getItem("caughtPokemonIds");
+
+    if (caughtPokemonIds && typeof caughtPokemonIds == "string")
+      //Set loaded pokemon ids to store
+      storeRef.current.dispatch(
+        setCaughtPokemonIds(JSON.parse(caughtPokemonIds))
+      );
   }
 
   useEffect(() => {

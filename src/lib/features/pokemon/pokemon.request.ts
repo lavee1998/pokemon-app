@@ -61,7 +61,6 @@ export async function fetchPokemon(id: string): Promise<PokemonDetailed> {
   }
 
   const jsonRes: PokemonDetailedResult = await res.json();
-  console.log({ jsonRes });
 
   return parsePokemonDetailedResult(jsonRes);
 }
@@ -76,8 +75,6 @@ export async function fetchPokemonsByType(
   }
 
   const jsonRes: PokemonTypeFetchResult = await res.json();
-
-  console.log({ jsonRes });
 
   return jsonRes.pokemon.map((pokemon) => parsePokemonResult(pokemon.pokemon));
 }

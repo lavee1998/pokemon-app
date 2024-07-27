@@ -14,6 +14,8 @@ export interface PokemonState {
   pokemons: PokemonType[];
   pokemon: PokemonDetailed | null;
   selectedType: PokemonType | null;
+  caughtPokemonIds: string[];
+  showOnlyCaughtPokemons: boolean;
   status: "idle" | "loading" | "failed";
 }
 
@@ -24,12 +26,24 @@ const initialState: PokemonState = {
   pokemons: [],
   selectedType: null,
   status: "idle",
+  caughtPokemonIds: [],
+  showOnlyCaughtPokemons: false,
 };
 
 export const pokemonSlice = createAppSlice({
   name: "pokemon",
   initialState,
   reducers: (create) => ({
+    setShowOnlyCaughtPokemons: create.reducer(
+      (state, action: PayloadAction<boolean>) => {
+        state.showOnlyCaughtPokemons = action.payload;
+      }
+    ),
+    setCaughtPokemonIds: create.reducer(
+      (state, action: PayloadAction<string[]>) => {
+        state.caughtPokemonIds = action.payload;
+      }
+    ),
     setSelectedPokemonType: create.reducer(
       (state, action: PayloadAction<PokemonType | null>) => {
         state.selectedType = action.payload;
@@ -106,22 +120,26 @@ export const pokemonSlice = createAppSlice({
     ),
   }),
   selectors: {
+    selectCaughtPokemonIds: (pokemon) => pokemon.caughtPokemonIds,
     selectPokemon: (pokemon) => pokemon.pokemon,
     selectTypes: (pokemon) => pokemon.types,
     selectStatus: (pokemon) => pokemon.status,
     selectType: (pokemon) => pokemon.selectedType,
     selectPokemons: (pokemon) => pokemon.pokemons,
     selectSearchKeyword: (pokemon) => pokemon.searchKeyword,
+    selectShowOnlyCaughtPokemons: (pokemon) => pokemon.showOnlyCaughtPokemons,
   },
 });
 
 export const {
+  setShowOnlyCaughtPokemons,
   initializePokemonTypesAsync,
   setSelectedPokemonType,
   setSearchKeyword,
   fetchPokemonsBySelectedTypeAsync,
   fetchPokemonByIdAsync,
   setPokemon,
+  setCaughtPokemonIds,
 } = pokemonSlice.actions;
 
 export const {
@@ -131,6 +149,8 @@ export const {
   selectType,
   selectPokemon,
   selectPokemons,
+  selectCaughtPokemonIds,
+  selectShowOnlyCaughtPokemons,
 } = pokemonSlice.selectors;
 
 export default pokemonSlice.reducer;

@@ -1,22 +1,36 @@
 "use client";
 
+import { useUpdateCaughtPokemonIds } from "@/lib/features/pokemon/pokemon.hooks";
 import {
+  selectCaughtPokemonIds,
   selectPokemons,
   selectSearchKeyword,
+  selectShowOnlyCaughtPokemons,
   selectType,
 } from "@/lib/features/pokemon/pokemon.slice";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useAppSelector } from "@/lib/hooks";
 import { Box, Button, Grid, useTheme } from "@mui/material";
 import Link from "next/link";
 
 export default function PokemonList() {
-  const dispatch = useAppDispatch();
   const pokemons = useAppSelector(selectPokemons);
   const searchKeyword = useAppSelector(selectSearchKeyword);
   const selectedType = useAppSelector(selectType);
+  const showOnlyCaughtPokemons = useAppSelector(selectShowOnlyCaughtPokemons);
+
+  const caughtPokemonIds = useAppSelector(selectCaughtPokemonIds);
+  const updateCaughtPokemonIds = useUpdateCaughtPokemonIds();
+
+  const handleClickCatchReleaseButton = (id: string) => {
+    updateCaughtPokemonIds(id);
+  };
 
   const theme = useTheme();
-  console.log({ pokemons });
+
+  const getIsAlreadyCatchedPokemon = (id: string) => {
+    return caughtPokemonIds.find((pokemonId) => pokemonId == id);
+  };
+
   return (
     <Box maxHeight={"400px"} overflow={"auto"} p={2}>
       <Grid container p={1} my={1} mx={2}>
@@ -32,13 +46,18 @@ export default function PokemonList() {
         <Grid item xs={3}></Grid>
       </Grid>
       {pokemons
-        .filter((pokemon) => pokemon.name.includes(searchKeyword)) //TODO
+        .filter((pokemon) =>
+          showOnlyCaughtPokemons
+            ? pokemon.name.includes(searchKeyword) &&
+              getIsAlreadyCatchedPokemon(pokemon.id)
+            : pokemon.name.includes(searchKeyword)
+        )
         .map((pokemon, i) => {
           return (
             <Box key={i}>
-              <Link href={"pokemons/" + pokemon.id}>
-                <Grid container mb={2}>
-                  <Grid item xs={9} pr={1}>
+              <Grid container mb={2}>
+                <Grid item xs={9} pr={1}>
+                  <Link href={"pokemons/" + pokemon.id}>
                     <Grid
                       container
                       border={1}
@@ -56,12 +75,20 @@ export default function PokemonList() {
                         caught {/* TODO */}
                       </Grid>
                     </Grid>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Button variant={"contained"}>{"Catch"}</Button>
-                  </Grid>
+                  </Link>
                 </Grid>
-              </Link>
+
+                <Grid item xs={3}>
+                  <Button
+                    onClick={() => handleClickCatchReleaseButton(pokemon.id)}
+                    variant={"contained"}
+                  >
+                    {getIsAlreadyCatchedPokemon(pokemon.id)
+                      ? "Release"
+                      : "Catch"}
+                  </Button>
+                </Grid>
+              </Grid>
             </Box>
           );
         })}
