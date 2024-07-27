@@ -1,4 +1,3 @@
-import styles from "./page.module.css";
 import PokemonTypeSelect from "./components/PokemonTypeSelect";
 import PokemonList from "./components/PokemonList";
 import { Box, Grid } from "@mui/material";

@@ -9,6 +9,7 @@ import { StoreProvider } from "./StoreProvider";
 import { Box, ThemeProvider } from "@mui/material";
 import Navbar from "./components/Navbar";
 import { theme } from "./theme";
+import Loader from "./components/Loader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
         <html lang="en">
           <body className={inter.className}>
             <Navbar />
+            <Loader />
             <Box sx={{ mt: "110px" }}>{children}</Box>
           </body>
         </html>

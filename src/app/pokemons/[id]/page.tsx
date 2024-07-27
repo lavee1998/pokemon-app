@@ -10,7 +10,6 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Button, ButtonBase, Grid, useTheme } from "@mui/material";
 import NextImage from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function DetailsView() {
