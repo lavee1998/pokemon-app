@@ -3,7 +3,7 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { pokemonSlice } from "./features/pokemon/pokemon.slice";
 
 const rootReducer = combineSlices(pokemonSlice); //TODO
-
+// Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
 
 export const makeStore = () => {

@@ -1,6 +1,9 @@
 "use client";
-import { fetchPokemonTypes } from "@/lib/features/pokemon/pokemon.request";
-import { initializePokemonTypesAsync } from "@/lib/features/pokemon/pokemon.slice";
+
+import {
+  fetchPokemonsBySelectedTypeAsync,
+  initializePokemonTypesAsync,
+} from "@/lib/features/pokemon/pokemon.slice";
 import type { AppStore } from "@/lib/store";
 import { makeStore } from "@/lib/store";
 import { setupListeners } from "@reduxjs/toolkit/query";
@@ -17,8 +20,8 @@ export const StoreProvider = ({ children }: Props) => {
 
   if (!storeRef.current) {
     storeRef.current = makeStore();
-    console.log("????")
     storeRef.current.dispatch(initializePokemonTypesAsync());
+    storeRef.current.dispatch(fetchPokemonsBySelectedTypeAsync());
   }
 
   useEffect(() => {
