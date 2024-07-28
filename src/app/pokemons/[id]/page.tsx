@@ -12,30 +12,34 @@ import { Box, Button, ButtonBase, Grid, useTheme } from "@mui/material";
 import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 
+//Details view to selected pokemon
 export default function DetailsView() {
-  const pokemon = useAppSelector(selectPokemon);
-  const dispatch = useAppDispatch();
-  const caughtPokemonIds = useAppSelector(selectCaughtPokemonIds);
-  const updateCaughtPokemonIds = useUpdateCaughtPokemonIds();
+  const pokemon = useAppSelector(selectPokemon); //selected pokemon from the store
+  const caughtPokemonIds = useAppSelector(selectCaughtPokemonIds); //get caught pokemons from store
+  const dispatch = useAppDispatch(); //use store dispatch
+  const updateCaughtPokemonIds = useUpdateCaughtPokemonIds(); //use hook to update caught pokemons in locale storage + redux store
+  const router = useRouter(); //use router hook to navigate on client side
+  const theme = useTheme(); //use hook to reach mui theme
 
+  //call hook method to update caught pokemons
   const handleClickCatchReleaseButton = (id: string) => {
     updateCaughtPokemonIds(id);
   };
 
-  const router = useRouter();
-  const theme = useTheme();
-
+  //navigate back method
   const handleClickBackToSearch = () => {
-    dispatch(setPokemon(null));
+    dispatch(setPokemon(null)); //reset pokemon state
     router.push("/");
   };
 
-  const getIsAlreadyCatchedPokemon = (id: string) => {
+  //return whether pokemon is already caught or not
+  const getIsAlreadyCaughtPokemon = (id: string) => {
     return !!caughtPokemonIds.find((pokemonId) => pokemonId == id);
   };
 
-  if (!pokemon) return null; //TODO
+  if (!pokemon) return null;
 
+  //create attributes map to avoid boilerplate rendering
   const attributes = [
     { name: "Name", value: pokemon?.name, postfix: "" },
     { name: "Weight", value: pokemon?.weight, postfix: "kg" },
@@ -44,7 +48,7 @@ export default function DetailsView() {
     {
       name: "Status",
       postfix: "",
-      value: getIsAlreadyCatchedPokemon(pokemon.id) ? "Catched" : "",
+      value: getIsAlreadyCaughtPokemon(pokemon.id) ? "Catched" : "",
     },
   ];
 
@@ -67,7 +71,7 @@ export default function DetailsView() {
               height: "auto",
               border:
                 "3px solid " +
-                (getIsAlreadyCatchedPokemon(pokemon.id)
+                (getIsAlreadyCaughtPokemon(pokemon.id)
                   ? theme.palette.secondary.main
                   : theme.palette.primary.main),
             }}
@@ -112,11 +116,11 @@ export default function DetailsView() {
             onClick={() => handleClickCatchReleaseButton(pokemon.id)}
             fullWidth
             color={
-              getIsAlreadyCatchedPokemon(pokemon.id) ? "secondary" : "primary"
+              getIsAlreadyCaughtPokemon(pokemon.id) ? "secondary" : "primary"
             }
             variant="contained"
           >
-            {getIsAlreadyCatchedPokemon(pokemon.id) ? "Release" : "Catch"}
+            {getIsAlreadyCaughtPokemon(pokemon.id) ? "Release" : "Catch"}
           </Button>
         </Grid>
       </Grid>

@@ -20,9 +20,10 @@ export const StoreProvider = ({ children }: Props) => {
   const storeRef = useRef<AppStore | null>(null);
 
   if (!storeRef.current) {
-    storeRef.current = makeStore();
-    storeRef.current.dispatch(initializePokemonTypesAsync());
-    storeRef.current.dispatch(fetchPokemonsBySelectedTypeAsync());
+    storeRef.current = makeStore(); //create store on init
+    //TODO, avoid loading all types and pokemons if it is not necessary
+    storeRef.current.dispatch(initializePokemonTypesAsync()); //fetch pokemon types and load it to store
+    storeRef.current.dispatch(fetchPokemonsBySelectedTypeAsync()); //fetch pokemons by type
   }
 
   useEffect(() => {

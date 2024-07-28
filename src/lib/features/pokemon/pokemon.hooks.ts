@@ -3,8 +3,9 @@ import { selectCaughtPokemonIds, setCaughtPokemonIds } from "./pokemon.slice";
 
 export function useUpdateCaughtPokemonIds() {
   const dispatch = useAppDispatch();
-  const caughtPokemonIds = useAppSelector(selectCaughtPokemonIds);
+  const caughtPokemonIds = useAppSelector(selectCaughtPokemonIds); //get caught pokemons from store
 
+  // Update caught pokemons in store and localestore
   const updateCaughtPokemonIds = (id: string) => {
     const shouldRemove = caughtPokemonIds.find((pokemonId) => pokemonId == id);
     let result: string[] = [];

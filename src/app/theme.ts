@@ -1,12 +1,7 @@
 "use client";
 import { createTheme } from "@mui/material";
 
-declare module "@mui/material/styles" {
-  interface Theme {}
-  // allow configuration using `createTheme`
-  interface ThemeOptions {}
-}
-
+//Create MUI theme
 export const theme = createTheme({
   palette: {
     secondary: {
