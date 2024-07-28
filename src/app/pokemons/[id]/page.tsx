@@ -59,6 +59,7 @@ export default function DetailsView() {
       <Grid container sx={{ alignItems: "center" }}>
         <Grid item xs={12} sm={6} p={2}>
           <NextImage
+            priority
             width={400}
             height={300}
             style={{

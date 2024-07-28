@@ -3,6 +3,7 @@
 import { Box, Container } from "@mui/material";
 import { useAppDispatch } from "@/lib/hooks";
 import { fetchPokemonByIdAsync } from "@/lib/features/pokemon/pokemon.slice";
+import { useEffect } from "react";
 
 export default function RootLayout({
   children,
@@ -15,7 +16,9 @@ export default function RootLayout({
 }>) {
   const dispatch = useAppDispatch();
 
-  if (params?.id) dispatch(fetchPokemonByIdAsync(params.id));
+  useEffect(() => {
+    if (params?.id) dispatch(fetchPokemonByIdAsync(params.id));
+  }, [params?.id]);
 
   return (
     <Container
