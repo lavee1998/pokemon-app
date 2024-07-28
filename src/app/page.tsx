@@ -1,8 +1,11 @@
 import PokemonTypeSelect from "./components/PokemonTypeSelect";
-import PokemonList from "./components/PokemonList";
 import { Box, Grid } from "@mui/material";
 import PokemonTypeTextField from "./components/PokemonSearchTextField";
 import CatchedPokemonCheckbox from "./components/CaughtPokemonCheckbox";
+import dynamic from "next/dynamic";
+const PokemonList = dynamic(() => import("./components/PokemonList"), {
+  ssr: false,
+}); //fix hydration error, which is caused by localStorage
 
 export default function Home() {
   return (

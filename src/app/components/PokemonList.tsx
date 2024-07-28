@@ -6,6 +6,7 @@ import {
   selectPokemons,
   selectSearchKeyword,
   selectShowOnlyCaughtPokemons,
+  selectStatus,
   selectType,
 } from "@/lib/features/pokemon/pokemon.slice";
 import { useAppSelector } from "@/lib/hooks";
@@ -16,6 +17,7 @@ export default function PokemonList() {
   const pokemons = useAppSelector(selectPokemons);
   const searchKeyword = useAppSelector(selectSearchKeyword);
   const selectedType = useAppSelector(selectType);
+  const appStatus = useAppSelector(selectStatus);
   const showOnlyCaughtPokemons = useAppSelector(selectShowOnlyCaughtPokemons);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
@@ -36,6 +38,15 @@ export default function PokemonList() {
       : theme.palette.primary.main;
   };
 
+  if (appStatus != "idle" || !pokemons.length) return null;
+
+  const filteredPokemons = pokemons.filter((pokemon) =>
+    showOnlyCaughtPokemons
+      ? pokemon.name.includes(searchKeyword) &&
+        getIsAlreadyCatchedPokemon(pokemon.id)
+      : pokemon.name.includes(searchKeyword)
+  );
+
   return (
     <Box
       bgcolor={matches ? theme.palette.primary.light : "inherit"}
@@ -54,57 +65,47 @@ export default function PokemonList() {
           Status
         </Grid>
       </Grid>
-      {pokemons
-        .filter((pokemon) =>
-          showOnlyCaughtPokemons
-            ? pokemon.name.includes(searchKeyword) &&
-              getIsAlreadyCatchedPokemon(pokemon.id)
-            : pokemon.name.includes(searchKeyword)
-        )
-        .map((pokemon, i) => {
-          return (
-            <Box key={i}>
-              <Grid container mb={2}>
-                <Grid item xs={9} pr={1}>
-                  <Link href={"pokemons/" + pokemon.id}>
-                    <Grid
-                      container
-                      border={1}
-                      p={1}
-                      borderRadius={3}
-                      sx={{
-                        bgcolor: "white",
-                      }}
-                      borderColor={getColorBasedOnIsCaught(pokemon.id)}
-                    >
-                      <Grid item xs={4}>
-                        {pokemon.name}
-                      </Grid>
-                      <Grid item xs={4}>
-                        {selectedType?.name}
-                      </Grid>
-                      <Grid item xs={4}>
-                        {getIsAlreadyCatchedPokemon(pokemon.id) && "Caught"}
-                      </Grid>
-                    </Grid>
-                  </Link>
-                </Grid>
 
-                <Grid item xs={3}>
-                  <Button
-                    onClick={() => handleClickCatchReleaseButton(pokemon.id)}
-                    variant={"contained"}
-                    sx={{ bgcolor: getColorBasedOnIsCaught(pokemon.id) }}
-                  >
-                    {getIsAlreadyCatchedPokemon(pokemon.id)
-                      ? "Release"
-                      : "Catch"}
-                  </Button>
+      {filteredPokemons.map((pokemon, i) => {
+        return (
+          <Grid key={i} container mb={2}>
+            <Grid item xs={9} pr={1}>
+              <Link href={"pokemons/" + pokemon.id}>
+                <Grid
+                  container
+                  border={1}
+                  p={1}
+                  borderRadius={3}
+                  sx={{
+                    bgcolor: "white",
+                  }}
+                  borderColor={getColorBasedOnIsCaught(pokemon.id)}
+                >
+                  <Grid item xs={4}>
+                    {pokemon.name}
+                  </Grid>
+                  <Grid item xs={4}>
+                    {selectedType?.name}
+                  </Grid>
+                  <Grid item xs={4}>
+                    {getIsAlreadyCatchedPokemon(pokemon.id) && "Caught"}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
-          );
-        })}
+              </Link>
+            </Grid>
+
+            <Grid item xs={3}>
+              <Button
+                onClick={() => handleClickCatchReleaseButton(pokemon.id)}
+                variant={"contained"}
+                sx={{ bgcolor: getColorBasedOnIsCaught(pokemon.id) }}
+              >
+                {getIsAlreadyCatchedPokemon(pokemon.id) ? "Release" : "Catch"}
+              </Button>
+            </Grid>
+          </Grid>
+        );
+      })}
     </Box>
   );
 }
