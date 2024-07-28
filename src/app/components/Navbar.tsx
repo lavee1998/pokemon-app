@@ -17,20 +17,12 @@ import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import { useTheme } from "@mui/material";
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-}
-
 const drawerWidth = 240;
 const navItems = [
   { title: "PokeAPI Documentation", href: "https://pokeapi.co/docs/v2" },
 ];
 
-export default function Navbar(props: Props) {
+export default function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const router = useRouter();
   const handleDrawerToggle = () => {

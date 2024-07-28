@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import { useAppDispatch } from "@/lib/hooks";
 import { fetchPokemonByIdAsync } from "@/lib/features/pokemon/pokemon.slice";
 import { useEffect } from "react";
